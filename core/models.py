@@ -42,7 +42,16 @@ class StyleImage(models.Model):
     image  =  models.ImageField(upload_to='StyleImage')
     creation_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(CustumUser, on_delete=models.CASCADE)
-    text_explanation = models.TextField()
+    text_explanation = models.TextField(null=True)
+    private = models.BooleanField(default=False)
+
+
+class OriginalImage(models.Model):
+
+    image  =  models.ImageField(upload_to='StyleImage')
+    creation_date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(CustumUser, on_delete=models.CASCADE)
+    text_explanation = models.TextField(null=True)
     private = models.BooleanField(default=False)
 
 
@@ -51,7 +60,8 @@ class StyledImage(models.Model):
     image  =  models.ImageField(upload_to='StyledImage')
     creation_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(CustumUser, on_delete=models.CASCADE)
-    text_explanation = models.TextField()
     private = models.BooleanField(default=False)
+    styleImage = models.ForeignKey(StyleImage, on_delete=models.CASCADE)
+    originalImage = models.ForeignKey(OriginalImage, on_delete=models.CASCADE)
 
 
