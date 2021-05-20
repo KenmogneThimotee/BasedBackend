@@ -55,7 +55,7 @@ class DownVote(models.Model):
     user = models.ForeignKey(CustumUser, on_delete=models.CASCADE)
 
     pass
-private = models.BooleanField(default=False)
+
 class LikeComment(models.Model):
 
     comment = models.ForeignKey(PostComment, on_delete=models.CASCADE)
