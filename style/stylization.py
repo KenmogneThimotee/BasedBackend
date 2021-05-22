@@ -1,19 +1,65 @@
-import tensorflow as tf
+#import tensorflow as tf
+from tensorflow.image import resize
+from tensorflow import constant
+#from tensorflow import image.resize
 import tensorflow_hub as hub
-# Load content and style images (see example in the attached colab).
-content_image = plt.imread(content_image_path)
-style_image = plt.imread(style_image_path)
-# Convert to float32 numpy array, add batch dimension, and normalize to range [0, 1]. Example using numpy:
-content_image = content_image.astype(np.float32)[np.newaxis, ...] / 255.
-style_image = style_image.astype(np.float32)[np.newaxis, ...] / 255.
-# Optionally resize the images. It is recommended that the style image is about
-# 256 pixels (this size was used when training the style transfer network).
-# The content image can be any size.
-style_image = tf.image.resize(style_image, (256, 256))
+import matplotlib.pyplot as plt
+import numpy as np
 
-# Load image stylization module.
-hub_module = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
 
-# Stylize image.
-outputs = hub_module(tf.constant(content_image), tf.constant(style_image))
-stylized_image = outputs[0]
+predictor_instance = None
+
+
+class Predictor():
+    
+    def __init__(self):
+
+        self.hub_module = hub.load('styleModel.tar.gz')
+
+
+    def prepareImage(self, file_path):
+
+        content_image = plt.imread(file_path)
+        content_image = content_image.astype(np.float32)[np.newaxis, ...] / 255.
+
+        return content_image
+
+
+    def prepareStyleImage(self, file_path):
+
+        style_image = plt.imread(file_path)
+        style_image = style_image.astype(np.float32)[np.newaxis, ...] / 255.
+
+        style_image = resize(style_image, (256, 256))
+        
+        return style_image
+
+    def predict(self, styleImage_path, contentImage_path):
+
+        content_image = self.prepareImage(contentImage_path)
+        style_image = self.prepareStyleImage(styleImage_path)
+
+        outputs = self.hub_module(constant(content_image), constant(style_image))
+        stylized_image = outputs[0]
+
+        return stylized_image
+
+
+class SingleFactoryPredictor():
+    
+    predictor_instance = None
+
+    def __init__(self):
+        if self.predictor_instance:
+            return self.predictor_instance
+        else:
+            self.predictor_instance = Predictor()
+            return self.predictor_instance
+
+    @staticmethod
+    def get_instance(self):
+        if self.predictor_instance:
+            return self.predictor_instance
+        else:
+            self.predictor_instance = Predictor()
+            return self.predictor_instance

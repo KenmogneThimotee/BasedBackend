@@ -35,6 +35,14 @@ class StyleImageViewset(viewsets.ModelViewSet):
         return StyleImage.objects.all()
 
 
+class OriginalImageViewset(viewsets.ModelViewSet):
+
+    queryset = OriginalImage.objects.all()
+    serializer_class = OriginalImageSerializer
+
+    def get_queryset(self):
+        return OriginalImage.objects.all()
+
 class StyledImageCollectionViewset(viewsets.ModelViewSet):
 
     queryset = StyledImageCollection.objects.all()

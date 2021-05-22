@@ -15,7 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls.conf import include
+import djoser
+import core
+import post
+import style
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('auth/',include('djoser.urls')),
+    path('auth/', include('djoser.urls.authtoken')),
+    path('core/', include('core.urls')),
+    path('post/', include('post.urls')),
+    path('style', include('style.urls'))
 ]

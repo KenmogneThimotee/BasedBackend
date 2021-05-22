@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djoser',
+    'rest_framework',
+    'rest_framework.authtoken',
 
     #applications
 
@@ -72,6 +75,21 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ],
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
+}
+
+"""
+DJOSER = {
+    'SERIALIZERS': 'core.serializers.CustumUserSerializer',
+}"""
 
 WSGI_APPLICATION = 'basedBackend.wsgi.application'
 

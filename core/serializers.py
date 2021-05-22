@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from .models import *
 from django.db import models
 from django.db.models import fields
@@ -18,12 +19,16 @@ class CustumUserSerializer(serializers.ModelSerializer):
 
 class StyledImageCollectionSerializer(serializers.ModelSerializer):
 
+    user = serializers.PrimaryKeyRelatedField(queryset=CustumUser)
+
     class Meta:
         model =  StyledImageCollection
         fields = "__all__"
 
 
 class StyleImageCollectionSerializer(serializers.ModelSerializer):
+
+    user = serializers.PrimaryKeyRelatedField(queryset=CustumUser)
 
     class Meta:
         model =  StyleImageCollection
@@ -32,12 +37,28 @@ class StyleImageCollectionSerializer(serializers.ModelSerializer):
 
 class StyleImageSerializer(serializers.ModelSerializer):
 
+    user = serializers.PrimaryKeyRelatedField(queryset=CustumUser)
+
     class Meta:
         model =  StyleImage
         fields = "__all__"
 
 
+class OriginalImageSerializer(serializers.ModelSerializer):
+
+    user = serializers.PrimaryKeyRelatedField(queryset=CustumUser)
+
+    class Meta:
+        model = OriginalImage
+        fields = "__all__"
+
+
+
+
 class StyledImageSerializer(serializers.ModelSerializer):
+
+    styleImage = serializers.PrimaryKeyRelatedField(queryset=StyleImage)
+    originalImage = serializers.PrimaryKeyRelatedField(queryset=OriginalImage)
 
     class Meta:
         model =  StyledImage

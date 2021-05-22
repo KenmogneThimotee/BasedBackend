@@ -15,13 +15,28 @@ class ImageSerializer(serializers.ModelSerializer):
         model =  Image
         fields = "__all__"
 
-            
+class ClickForStyleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ClickForStyle
+        fields = "__all__"
+
+
+class PostCommentSerializer(serializers.ModelSerializer):
+
+    user = serializers.PrimaryKeyRelatedField(queryset=CustumUser)
+    #response = super().__init__(many=True)
+
+    class Meta:
+        model = PostComment
+        fields = "__all__"
+
 
 class PostSerializer(serializers.ModelSerializer):
 
-    images = serializers.ListField(child=serializers.FileField( max_length=100000,
-    allow_empty_file=False,
-    use_url=True ))
+    image = ImageSerializer(many=True)
+    cickForStyle = ClickForStyleSerializer(many=True)
+    comment = PostCommentSerializer(many=True)
 
 
     class Meta:
@@ -31,6 +46,7 @@ class PostSerializer(serializers.ModelSerializer):
     def create(self, **validated_data):
         return Post.objects.create(**validated_data)
 
+    """
     def update(self, instance, **validated_data):
         instance.__dict__.update(**validated_data)
         instance.save()
@@ -42,28 +58,25 @@ class PostSerializer(serializers.ModelSerializer):
             image.save()
         
         return instance
+    """
 
-class ClickForStyleSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = ClickForStyle
-        fields = "__all__"
-
-
-class PostCommentSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = PostComment
-        fields = "__all__"
 
 
 class UpVoteSerializer(serializers.ModelSerializer):
+
+    user = serializers.PrimaryKeyRelatedField(queryset=CustumUser)
+    post = serializers.PrimaryKeyRelatedField(queryset=Post)
 
     class Meta:
         model = UpVote
         fields = "__all__"
 
+
+
 class DownVoteSerializer(serializers.ModelSerializer):
+
+    user = serializers.PrimaryKeyRelatedField(queryset=CustumUser)
+    post = serializers.PrimaryKeyRelatedField(queryset=Post)
 
     class Meta:
         model = DownVote
@@ -72,12 +85,18 @@ class DownVoteSerializer(serializers.ModelSerializer):
 
 class LikeCommentSerializer(serializers.ModelSerializer):
 
+    user = serializers.PrimaryKeyRelatedField(queryset=CustumUser)
+    post = serializers.PrimaryKeyRelatedField(queryset=PostComment)
+
     class Meta:
         model = LikeComment
         fields = "__all__"
 
 
 class DislikeCommentSerializer(serializers.ModelSerializer):
+
+    user = serializers.PrimaryKeyRelatedField(queryset=CustumUser)
+    post = serializers.PrimaryKeyRelatedField(queryset=PostComment)
 
     class Meta:
         model = DislikeComment

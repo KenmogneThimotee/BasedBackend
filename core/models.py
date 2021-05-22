@@ -8,13 +8,17 @@ from django.db.models.query import FlatValuesListIterable
 class CustumUser(AbstractUser):
 
     born_day = models.DateField(null=False, blank=False)
-    nick_name = models.CharField(max_length=100)
+    nick_name = models.CharField(max_length=100, unique=True)
     profile_picture = models.ImageField(upload_to='profile_picture')
     bio = models.CharField(max_length=250)
     mail = models.EmailField(unique=True)
 
     REQUIRED_FIELDS = ['born_day', 'nick_name']
     USERNAME_FIELD = 'mail'
+
+
+    def __str__(self) -> str:
+        return self.nick_name
 
 
 class StyledImageCollection(models.Model):
@@ -26,6 +30,10 @@ class StyledImageCollection(models.Model):
     user = models.ForeignKey(CustumUser, on_delete=models.CASCADE)
     private = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        return self.text_explanation
+
+
 class StyleImageCollection(models.Model):
 
     text_explanation = models.TextField()
@@ -35,6 +43,8 @@ class StyleImageCollection(models.Model):
     user = models.ForeignKey(CustumUser, on_delete=models.CASCADE)
     private = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        return self.text_explanation
 
 
 class StyleImage(models.Model):
@@ -45,6 +55,8 @@ class StyleImage(models.Model):
     text_explanation = models.TextField(null=True)
     private = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        return self.text_explanation
 
 class OriginalImage(models.Model):
 
@@ -53,6 +65,9 @@ class OriginalImage(models.Model):
     user = models.ForeignKey(CustumUser, on_delete=models.CASCADE)
     text_explanation = models.TextField(null=True)
     private = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return self.text_explanation
 
 
 class StyledImage(models.Model):
@@ -64,4 +79,6 @@ class StyledImage(models.Model):
     styleImage = models.ForeignKey(StyleImage, on_delete=models.CASCADE)
     originalImage = models.ForeignKey(OriginalImage, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        return str(self.styleImage)+"--"+str(self.originalImage)
 
