@@ -13,6 +13,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
 
+import {MatCardModule} from '@angular/material/card'; 
+import {MatButtonModule} from '@angular/material/button'; 
+import {MatTabsModule} from '@angular/material/tabs'; 
 
 @NgModule({
   imports: [
@@ -22,7 +25,10 @@ import { ComponentsModule } from './components/components.module';
     ComponentsModule,
     NgbModule,
     RouterModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatCardModule,
+    MatButtonModule,
+    MatTabsModule
   ],
   declarations: [
     AppComponent,
